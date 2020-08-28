@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CityService } from '../../services/city.service';
 import { City } from '../../models/city';
+import { AuthService } from '../../services/auth.service';
 
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  FormBuilder,
-} from '@angular/forms';
-
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-city-add',
@@ -20,7 +15,7 @@ export class CityAddComponent implements OnInit {
   constructor(
     private cityService: CityService,
     private formBuilder: FormBuilder,
-  
+    private authService: AuthService
   ) {}
 
   city: City;
@@ -40,8 +35,8 @@ export class CityAddComponent implements OnInit {
   add() {
     if (this.cityAddForm.valid) {
       this.city = Object.assign({}, this.cityAddForm.value);
-      this.city.userId = 1;
-      this.cityService.add(this.city);    
+      this.city.userId = this.authService.getCurrentUserId();
+      this.cityService.add(this.city);
     }
   }
 }
